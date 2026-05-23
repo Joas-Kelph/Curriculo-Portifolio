@@ -383,13 +383,7 @@ export default function App() {
   return (
     <div className="min-h-screen bg-slate-50 flex flex-col text-slate-800 antialiased font-sans transition-colors duration-150 relative notranslate">
       
-      {/* View-Only Share Mode Alert Banner */}
-      {isSharedView && (
-        <div className="bg-gradient-to-r from-amber-600 to-amber-500 text-white font-semibold text-xs py-2.5 px-4 shadow-sm text-center flex items-center justify-center gap-2 relative z-50 no-print">
-          <span className="flex h-2 w-2 relative">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-      )} 
+      {/* View-Only Share Mode Alert Banner removed as requested */}
 
       {/* Save Toast Indicator */}
       {saveBanner && (
@@ -1394,15 +1388,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="font-display font-semibold text-white" translate="no">
-              Joás Kelph • Portfólio de Currículos
+              Joás Kelph • Portfólio de Currículos Especializados
             </h4>
             <p className="text-slate-500">
-              Alternância inteligente de trilhas profissionais.
+              Alternância inteligente de trilhas profissionais e suporte com Inteligência Artificial Gemini (Google).
             </p>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-[10px] text-slate-500 font-mono">
-              © {new Date().getFullYear()} • Feito com Node - React - TypeScript
+              © {new Date().getFullYear()} • Feito com Stack React + Tailwind CSS
             </span>
           </div>
         </div>
