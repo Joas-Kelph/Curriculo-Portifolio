@@ -1,8 +1,8 @@
-# Run and deploy your AI Studio app
+# Run and deploy your app
 
 This contains everything you need to run your app locally.
 
-View your app in AI Studio: https://ai.studio/apps/20263a64-277c-4825-99e2-1fa9a85a3b79
+View your app in site: https://joasportifolio.netlify.app/
 
 ## Run Locally
 
