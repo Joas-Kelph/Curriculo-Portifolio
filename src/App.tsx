@@ -743,7 +743,7 @@ export default function App() {
                 Minhas Áreas Curriculares
               </h3>
               <p className="text-xs text-slate-500">
-                Selecione para alternar o modelo do currículo e customizá-lo:
+                Selecione para alternar o modelo do currículo desejado
               </p>
             </div>
 
@@ -1391,7 +1391,7 @@ export default function App() {
               Joás Kelph • Portfólio de Currículos
             </h4>
             <p className="text-slate-500">
-              Alternância inteligente de trilhas profissionais e suporte com Inteligência Artificial Gemini (Google).
+              Alternância inteligente de trilhas profissionais e suporte com Inteligência Artificial Gemini.
             </p>
           </div>
           <div className="flex items-center gap-4">
