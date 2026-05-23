@@ -1388,7 +1388,7 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="font-display font-semibold text-white" translate="no">
-              Joás Kelph • Portfólio de Currículos Especializados
+              Joás Kelph • Portfólio de Currículos
             </h4>
             <p className="text-slate-500">
               Alternância inteligente de trilhas profissionais e suporte com Inteligência Artificial Gemini (Google).
@@ -1396,7 +1396,7 @@ export default function App() {
           </div>
           <div className="flex items-center gap-4">
             <span className="text-[10px] text-slate-500 font-mono">
-              © {new Date().getFullYear()} • Feito com Stack React + Tailwind CSS
+              © {new Date().getFullYear()} • Feito com  React + Node + TypeScript
             </span>
           </div>
         </div>
