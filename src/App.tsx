@@ -389,9 +389,6 @@ export default function App() {
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-            // </span>
-            //      <span>👁️ <strong>Modo de Visualização Compartilhado Ativo:</strong> Você está visualizando o portfólio completo de Joás Kelph em modo protegido. A edição e alteração de dados está desativada.</span>
-            // </div> 
       )} 
 
       {/* Save Toast Indicator */}
