@@ -389,10 +389,10 @@ export default function App() {
           <span className="flex h-2 w-2 relative">
             <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
             <span className="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
-          </span>
-          <span>👁️ <strong>Modo de Visualização Compartilhado Ativo:</strong> Você está visualizando o portfólio completo de Joás Kelph em modo protegido. A edição e alteração de dados está desativada.</span>
-        </div>
-      )}
+            // </span>
+            //      <span>👁️ <strong>Modo de Visualização Compartilhado Ativo:</strong> Você está visualizando o portfólio completo de Joás Kelph em modo protegido. A edição e alteração de dados está desativada.</span>
+            // </div> 
+      )} 
 
       {/* Save Toast Indicator */}
       {saveBanner && (
@@ -1397,15 +1397,15 @@ export default function App() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row justify-between items-center gap-4">
           <div className="space-y-1 text-center sm:text-left">
             <h4 className="font-display font-semibold text-white" translate="no">
-              Joás Kelph • Portfólio de Currículos Especializados
+              Joás Kelph • Portfólio de Currículos
             </h4>
             <p className="text-slate-500">
-              Alternância inteligente de trilhas profissionais e suporte com Inteligência Artificial Gemini (Google).
+              Alternância inteligente de trilhas profissionais.
             </p>
           </div>
           <div className="flex items-center gap-4">
             <span className="text-[10px] text-slate-500 font-mono">
-              © {new Date().getFullYear()} • Feito com Stack React + Tailwind CSS
+              © {new Date().getFullYear()} • Feito com Node - React - TypeScript
             </span>
           </div>
         </div>
