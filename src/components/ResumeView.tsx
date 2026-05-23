@@ -1,5 +1,5 @@
 import { CurriculoData } from "../types";
-import { Mail, Phone, MapPin, Linkedin, Github, Globe, Award, BookOpen, Briefcase, GraduationCap, Languages, Sparkles } from "lucide-react";
+import { Mail, Phone, MapPin, Linkedin, Github, Globe, Award, BookOpen, Briefcase, GraduationCap, Languages, Sparkles, Instagram } from "lucide-react";
 
 interface ResumeViewProps {
   data: CurriculoData;
@@ -105,6 +105,21 @@ export default function ResumeView({ data, areaName }: ResumeViewProps) {
                   >
                     <Github className="h-4 w-4 text-slate-700 shrink-0 print:text-slate-600" />
                     <span className="truncate">{data.contato.github.replace("github.com/", "")}</span>
+                  </a>
+                </li>
+              )}
+              {data.contato.instagram && (
+                <li>
+                  <a
+                    href={data.contato.instagram.startsWith("http") ? data.contato.instagram : `https://instagram.com/${data.contato.instagram.replace("@", "")}`}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="flex items-center gap-2 hover:text-blue-600 transition-colors py-0.5 print:text-slate-700"
+                  >
+                    <Instagram className="h-4 w-4 text-pink-600 shrink-0 print:text-slate-600" />
+                    <span className="truncate">
+                      {data.contato.instagram.startsWith("@") ? data.contato.instagram : `@${data.contato.instagram}`}
+                    </span>
                   </a>
                 </li>
               )}

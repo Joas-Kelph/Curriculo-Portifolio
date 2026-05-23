@@ -5,6 +5,7 @@ export interface Contato {
   linkedin: string;
   github: string;
   website: string;
+  instagram?: string;
 }
 
 export interface Experiencia {

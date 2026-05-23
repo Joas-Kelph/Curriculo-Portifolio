@@ -14,6 +14,7 @@ export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
         linkedin: "linkedin.com/in/joaskelph",
         github: "github.com/Joas-Kelph",
         website: "",
+        instagram: "",
       },
       resumo: "Profissional com sólida base técnica em informática e gestão, cursando Engenharia de Software. Possuo qualificações específicas em Gestão Financeira, Gestão de Pessoas e Proteção de Dados (LGPD). Destaco-me pela facilidade com ferramentas digitais, capacidade analítica na elaboração de relatórios e foco na qualidade do atendimento e melhoria de processos internos.",
       experiencias: [
@@ -81,15 +82,23 @@ export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
       fotoUrl: "https://images.unsplash.com/photo-1556910103-1c02745aae4d?auto=format&fit=crop&q=80&w=300&h=300",
       tituloProfissional: "Chef Confeiteiro Especialista em Patisserie Fina",
       contato: {
-        email: "joaskelph@rede.ulbra.br",
+        email: "joaskelph18@gmail.com",
         telefone: "(63) 93300-5939",
         localizacao: "Palmas, TO - Brasil",
         linkedin: "linkedin.com/in/joaskelph",
         github: "github.com/Joas-Kelph",
         website: "",
+        instagram: "@jottaconfeitaria",
       },
-      resumo: "Chef Confeiteiro apaixonado pela arte dos doces, com profunda expertise em confeitaria fina clássica e moderna. Ampla vivência no desenvolvimento de cardápios de sobremesas exclusivas, elaboração de bolos artísticos esculpidos, folhados e tortas finas francesas. Forte domínio de técnicas de chocolataria, controle de custos de receitas e práticas de extrema higiene e segurança de alimentos (sistema HACCP).",
+      resumo: "Chef Confeiteiro apaixonado pela arte dos doces, com profunda expertise em confeitaria fina clássica e moderna. Ampla vivência no desenvolvimento de cardápios de sobremesas exclusivas, elaboração de bolos artísticos esculpidos, folhados e tortas finas francesas. Forte domínio de técnicas de chocolataria, controle de custos de receitas e práticas de extrema higiene e segurança de alimentos (sistema HACCP). Autônomo criativo à frente do Jotta Confeitaria.",
       experiencias: [
+        {
+          id: "c0",
+          empresa: "Jotta Confeitaria (@jottaconfeitaria)",
+          cargo: "Confeiteiro e Idealizador / Criador de Conteúdo",
+          periodo: "2023 - Presente",
+          descricao: "Criação, produção artesanal e comercialização de bolos requintados sob encomenda, tortas e sobremesas exclusivas. Divulgação ativa em mídias digitais e produção de conteúdo dinâmico de produção e finalização, cultivando uma comunidade fiel de clientes fiéis.",
+        },
         {
           id: "c1",
           empresa: "Patisserie Douce Amour",
@@ -134,6 +143,11 @@ export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
         { id: "ci2", idioma: "Espanhol", nivel: "Básico" },
       ],
       certificacoes: [
+        "Confeitaria – IFRS (Instituto Federal do Rio Grande do Sul)",
+        "Confeitaria para Iniciantes",
+        "Curso de Pasta Americana Básico",
+        "Gastronomia: História – Evolução e Cultura",
+        "Ruffles Cake com Magnólias de Açúcar",
         "Curso Prático de Higiene e Manipulação Alimentar",
         "Masterclass em Arte em Açúcar e Isomalte de Alto Padrão - Atelier Gastronômico",
       ],
@@ -149,6 +163,7 @@ export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
         linkedin: "linkedin.com/in/joaskelph",
         github: "github.com/Joas-Kelph",
         website: "",
+        instagram: "",
       },
       resumo: "Profissional com experiência em atendimento ao cliente, vendas e organização de estoque, atuando em empresas de diferentes segmentos. Possuo facilidade em comunicação, agilidade no atendimento, apoio no processo de vendas, reposição e controle de mercadorias. Sou pontual, dedicado, organizado e sempre disposto a aprender, contribuindo para um ambiente de trabalho produtivo, eficiente e positivo.",
       experiencias: [
@@ -222,12 +237,13 @@ export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
       fotoUrl: "https://images.unsplash.com/photo-1509440159596-0249088772ff?auto=format&fit=crop&q=80&w=300&h=300",
       tituloProfissional: "Padeiro Sênior e Especialista em Fermentação Natural",
       contato: {
-        email: "joaskelph@rede.ulbra.br",
+        email: "joaskelph18@gmail.com",
         telefone: "(63) 93300-5939",
         localizacao: "Palmas, TO - Brasil",
         linkedin: "linkedin.com/in/joaskelph",
         github: "github.com/Joas-Kelph",
         website: "",
+        instagram: "@jottaconfeitaria",
       },
       resumo: "Padeiro Técnico Artesanal especializado no clássico Sourdough (Fermentação Natural Lenta) e panificações internacionais clássicas (Croissants, Brioches, Ciabattas). Experiente em gerenciar volumes pesados de batimento de massas, cilindragem segura, modelagem inteiramente manual, cálculo exato de hidratação (percentual do padeiro) e acompanhamento técnico de forneamento em lastros avançados.",
       experiencias: [
@@ -269,6 +285,7 @@ export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
         { id: "pi2", idioma: "Inglês", nivel: "Básico" },
       ],
       certificacoes: [
+        "Salgadeiro Profissional – SENAC",
         "Boas Práticas Sanitárias Industriais de Alimentos - ANVISA",
         "Workshop Avançado de Panetone Artesanal Italiano de Alta Hidratação - Lievito Madre",
       ],
@@ -284,6 +301,7 @@ export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
         linkedin: "linkedin.com/in/joaskelph",
         github: "github.com/Joas-Kelph",
         website: "",
+        instagram: "",
       },
       resumo: "Estudante de Engenharia de Software e Técnico em Informática, com foco em desenvolvimento de sistemas e infraestrutura. Possuo base sólida em desenvolvimento web utilizando Python, JavaScript e Node.js, além de experiência com versionamento de código (Git) e lógica computacional. Tenho facilidade em resolver problemas técnicos complexos e busco constantemente aplicar boas práticas de desenvolvimento e novas tecnologias para criar soluções eficientes e escaláveis.",
       experiencias: [

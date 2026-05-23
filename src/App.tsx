@@ -30,7 +30,14 @@ import {
   Share2,
   Terminal,
   Upload,
-  Image
+  Image,
+  Settings,
+  Copy,
+  Code,
+  FileCode,
+  Database,
+  Eye,
+  Lock
 } from "lucide-react";
 import { AreaCurriculo, CurriculoData, CurriculoMultidisciplinar, Experiencia, Educacao, Idioma } from "./types";
 import { DEFAULT_CURRICULOS } from "./defaultData";
@@ -38,17 +45,13 @@ import ResumeView from "./components/ResumeView";
 import AIEnhancerModal from "./components/AIEnhancerModal";
 
 export default function App() {
-  // Determine if it is a shared read-only view
+  // Determine if it is a shared read-only view via URL params
   const isSharedViewParam = typeof window !== "undefined" && 
     (new URLSearchParams(window.location.search).get("view") === "true" || 
      new URLSearchParams(window.location.search).get("share") === "true");
 
   // Load data from localStorage or use default mock data
   const [data, setData] = useState<CurriculoMultidisciplinar>(() => {
-    if (isSharedViewParam) {
-      return DEFAULT_CURRICULOS;
-    }
-
     const saved = localStorage.getItem("joas_kelph_cv_portfolio");
     if (saved) {
       try {
@@ -78,6 +81,18 @@ export default function App() {
           if (!atendimentoArea || !atendimentoArea.experiencias || atendimentoArea.experiencias.some((exp: any) => exp.empresa === "Boulangerie Gourmet D'or" || exp.empresa === "Cafeteria Espresso & Cia")) {
             parsed.areas["Atendimento ao Público"] = { ...DEFAULT_CURRICULOS.areas["Atendimento ao Público"] };
           }
+
+          const confeitariaArea = parsed.areas["Confeitaria"];
+          // If Confeitaria area is missing, doesn't have the new courses, or doesn't have instagram, migrate to real PDF info
+          if (!confeitariaArea || !confeitariaArea.certificacoes || !confeitariaArea.certificacoes.some((cert: any) => cert.includes("IFRS") || cert.includes("Pasta Americana")) || !confeitariaArea.contato.instagram) {
+            parsed.areas["Confeitaria"] = { ...DEFAULT_CURRICULOS.areas["Confeitaria"] };
+          }
+
+          const padariaArea = parsed.areas["Padaria"];
+          // If Padaria area is missing, doesn't have the new Salgadeiro course, or doesn't have instagram, migrate
+          if (!padariaArea || !padariaArea.certificacoes || !padariaArea.certificacoes.some((cert: any) => cert.includes("Salgadeiro")) || !padariaArea.contato.instagram) {
+            parsed.areas["Padaria"] = { ...DEFAULT_CURRICULOS.areas["Padaria"] };
+          }
           localStorage.setItem("joas_kelph_cv_portfolio", JSON.stringify(parsed));
         }
         return parsed;
@@ -89,11 +104,64 @@ export default function App() {
   });
 
   const [activeArea, setActiveArea] = useState<AreaCurriculo>(data.activeArea || "Gestão");
-  const [isSharedView, setIsSharedView] = useState<boolean>(isSharedViewParam);
-  const [shareToast, setShareToast] = useState<boolean>(false);
-  const [isEditMode, setIsEditMode] = useState<boolean>(() => {
-    return !isSharedViewParam;
+  
+  // Decide if shared view mode is on: true for visitors, false if owner activated editor
+  const [isSharedView, setIsSharedView] = useState<boolean>(() => {
+    const urlParams = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+    if (urlParams.get("edit") === "true") return false;
+    if (urlParams.get("view") === "true" || urlParams.get("share") === "true") return true;
+    
+    if (typeof window !== "undefined") {
+      const storedAdmin = localStorage.getItem("joas_admin_editor_active");
+      if (storedAdmin === "true") return false;
+    }
+    return true; // Default view-only for public!
   });
+
+  const [isEditMode, setIsEditMode] = useState<boolean>(() => {
+    const urlParams = new URLSearchParams(typeof window !== "undefined" ? window.location.search : "");
+    if (urlParams.get("edit") === "true") return true;
+    if (urlParams.get("view") === "true" || urlParams.get("share") === "true") return false;
+    
+    if (typeof window !== "undefined") {
+      return localStorage.getItem("joas_admin_editor_active") === "true";
+    }
+    return false;
+  });
+
+  const [passwordModalOpen, setPasswordModalOpen] = useState<boolean>(false);
+  const [passwordInput, setPasswordInput] = useState<string>("");
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+
+  const handleToggleMode = (mode: "view" | "edit") => {
+    if (mode === "edit") {
+      setPasswordInput("");
+      setPasswordError(null);
+      setPasswordModalOpen(true);
+    } else {
+      setIsSharedView(true);
+      setIsEditMode(false);
+      localStorage.setItem("joas_admin_editor_active", "false");
+    }
+  };
+
+  const handleVerifyPassword = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (passwordInput === "05062004") {
+      setIsSharedView(false);
+      setIsEditMode(true);
+      localStorage.setItem("joas_admin_editor_active", "true");
+      setPasswordModalOpen(false);
+      setPasswordError(null);
+    } else {
+      setPasswordError("Senha incorreta! Tente novamente.");
+    }
+  };
+
+  const [exportModalOpen, setExportModalOpen] = useState<boolean>(false);
+  const [copiedDataSuccess, setCopiedDataSuccess] = useState<boolean>(false);
+
+  const [shareToast, setShareToast] = useState<boolean>(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState<boolean>(false);
   const [mobileViewTab, setMobileViewTab] = useState<"edit" | "preview">("edit");
   const [saveBanner, setSaveBanner] = useState<boolean>(false);
@@ -426,18 +494,49 @@ export default function App() {
 
             {/* Desktop Actions */}
             <div className="hidden md:flex items-center gap-3">
-              {!isSharedView ? (
+              <button
+                onClick={() => handleToggleMode(isSharedView ? "edit" : "view")}
+                className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer border ${
+                  isSharedView
+                    ? "bg-slate-800 hover:bg-slate-700 text-white border-slate-700 hover:border-slate-600"
+                    : "bg-amber-500/10 border-amber-500/30 text-amber-300 hover:bg-amber-500/20"
+                }`}
+                title={isSharedView ? "Entrar no modo administrativo de edição" : "Voltar para o modo de portfólio limpo"}
+              >
+                {isSharedView ? (
+                  <>
+                    <Settings className="h-3.5 w-3.5 text-blue-400" />
+                    <span>Acessar Modo Editor</span>
+                  </>
+                ) : (
+                  <>
+                    <Eye className="h-3.5 w-3.5 text-amber-400" />
+                    <span>Ver como Visitante</span>
+                  </>
+                )}
+              </button>
+
+              {!isSharedView && (
                 <>
                   <button
                     onClick={() => setIsEditMode(!isEditMode)}
                     className={`px-4 py-2 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer ${
                       isEditMode
                         ? "bg-blue-600 hover:bg-blue-500 text-white shadow-sm"
-                        : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-700"
+                        : "bg-slate-800 hover:bg-slate-700 text-white border border-slate-705"
                     }`}
                   >
                     <Edit className="h-3.5 w-3.5" />
                     {isEditMode ? "Fechar Form de Edição" : "Editar Currículo"}
+                  </button>
+
+                  <button
+                    onClick={() => setExportModalOpen(true)}
+                    className="px-4 py-2 bg-indigo-950/60 hover:bg-indigo-900 text-indigo-200 border border-indigo-700/40 rounded-xl text-xs font-semibold flex items-center gap-2 transition-all cursor-pointer"
+                    title="Exportar arquivo defaultData.ts com as suas edições de hoje"
+                  >
+                    <Database className="h-3.5 w-3.5 text-indigo-400" />
+                    <span>Exportar Dados</span>
                   </button>
 
                   <button
@@ -449,10 +548,6 @@ export default function App() {
                     Compartilhar
                   </button>
                 </>
-              ) : (
-                <div className="px-3 py-1.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-xl text-[11px] font-semibold flex items-center gap-1.5">
-                  <span>Modo Visualizador</span>
-                </div>
               )}
               
               <button
@@ -580,6 +675,17 @@ export default function App() {
                 <>
                   <button
                     onClick={() => {
+                      handleToggleMode("view");
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full py-2.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 hover:bg-amber-500/20 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Eye className="h-3.5 w-3.5 text-amber-400" />
+                    <span>Ver como Visitante</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
                       setIsEditMode(!isEditMode);
                       setMobileMenuOpen(false);
                     }}
@@ -589,6 +695,17 @@ export default function App() {
                   >
                     <Edit className="h-3.5 w-3.5" />
                     <span>{isEditMode ? "Fechar Form de Edição" : "Editar Currículo Manual"}</span>
+                  </button>
+
+                  <button
+                    onClick={() => {
+                      setExportModalOpen(true);
+                      setMobileMenuOpen(false);
+                    }}
+                    className="w-full py-2.5 bg-indigo-950/60 hover:bg-indigo-900 text-indigo-200 border border-indigo-700/40 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    <Database className="h-3.5 w-3.5 text-indigo-400" />
+                    <span>Exportar Dados</span>
                   </button>
 
                   <button
@@ -603,9 +720,16 @@ export default function App() {
                   </button>
                 </>
               ) : (
-                <div className="w-full py-2.5 bg-amber-500/10 border border-amber-500/30 text-amber-300 rounded-lg text-xs font-semibold text-center">
-                  Modo de Visualização (Sem Edição)
-                </div>
+                <button
+                  onClick={() => {
+                    handleToggleMode("edit");
+                    setMobileMenuOpen(false);
+                  }}
+                  className="w-full py-2.5 bg-slate-800 text-slate-200 border border-slate-700 hover:bg-slate-705 rounded-lg text-xs font-semibold flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <Settings className="h-3.5 w-3.5 text-blue-400" />
+                  <span>Acessar Modo Editor</span>
+                </button>
               )}
             </div>
           </div>
@@ -924,6 +1048,17 @@ export default function App() {
                       onChange={(e) => handleContactChange("website", e.target.value)}
                       className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500"
                       placeholder="www.joas.com"
+                    />
+                  </div>
+
+                  <div className="space-y-1">
+                    <label className="text-[11px] font-semibold text-slate-500 block">Instagram (Opcional)</label>
+                    <input
+                      type="text"
+                      value={currentCv.contato.instagram || ""}
+                      onChange={(e) => handleContactChange("instagram", e.target.value)}
+                      className="w-full text-xs px-3 py-2 bg-slate-50 border border-slate-200 rounded-lg focus:outline-none focus:border-blue-500"
+                      placeholder="@jottaconfeitaria"
                     />
                   </div>
                 </div>
@@ -1287,6 +1422,160 @@ export default function App() {
           if (aiCallback) aiCallback(txt);
         }}
       />
+
+      {/* EXPORT DATA MODAL */}
+      {exportModalOpen && (
+        <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4 z-50 no-print animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-2xl w-full p-6 space-y-4 shadow-2xl relative">
+            <button
+              onClick={() => {
+                setExportModalOpen(false);
+                setCopiedDataSuccess(false);
+              }}
+              className="absolute top-4 right-4 p-1.5 hover:bg-slate-800 rounded-xl text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex items-center gap-2.5">
+              <div className="p-2.5 bg-indigo-500/10 rounded-xl border border-indigo-500/20 text-indigo-400">
+                <FileCode className="h-5 w-5" />
+              </div>
+              <div>
+                <h3 className="font-display font-medium text-white text-base">
+                  Exportar Dados de Produção
+                </h3>
+                <span className="text-[11px] text-slate-400">
+                  Salve permanentemente as modificações no seu código-fonte para carregar no seu domínio final (GitHub, etc.).
+                </span>
+              </div>
+            </div>
+
+            <div className="bg-blue-950/30 border border-blue-500/15 p-4 rounded-xl text-slate-300 text-xs leading-relaxed space-y-1.5">
+              <span className="text-blue-300 font-semibold block">Como usar seus dados no seu próprio domínio/site:</span>
+              <ol className="list-decimal list-inside space-y-1 text-slate-300 text-[11px]">
+                <li>Copie todo o código gerado no campo de texto abaixo.</li>
+                <li>No seu projeto local recebido do export, navegue até o arquivo <code className="bg-slate-950 px-1 py-0.5 rounded text-indigo-300 font-mono text-[10px]">/src/defaultData.ts</code>.</li>
+                <li>Substitua todo o conteúdo original desse arquivo pelo código copiado.</li>
+                <li>Pronto! Quando você enviar para o GitHub, o seu site carregará automaticamente todos os seus dados atualizados (para todos os visitantes)!</li>
+              </ol>
+            </div>
+
+            <div className="space-y-1.5">
+              <div className="flex justify-between items-center">
+                <label className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+                  Código de defaultData.ts (Completo)
+                </label>
+                <button
+                  onClick={() => {
+                    const code = `import { CurriculoMultidisciplinar } from "./types";\n\nexport const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = ${JSON.stringify(data, null, 2)};\n`;
+                    navigator.clipboard.writeText(code).then(() => {
+                      setCopiedDataSuccess(true);
+                      setTimeout(() => setCopiedDataSuccess(false), 3000);
+                    });
+                  }}
+                  className="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 active:bg-indigo-700 text-white font-mono text-[10.5px] font-semibold rounded-lg flex items-center gap-1.5 transition-all cursor-pointer shadow-sm shadow-indigo-950/20"
+                >
+                  <Copy className="h-3 w-3" />
+                  <span>{copiedDataSuccess ? "Copiado!" : "Copiar Código"}</span>
+                </button>
+              </div>
+
+              <textarea
+                readOnly
+                value={`import { CurriculoMultidisciplinar } from "./types";\n\nexport const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = ${JSON.stringify(data, null, 2)};`}
+                className="w-full h-64 text-[10px] font-mono p-3 bg-slate-950 border border-slate-850 rounded-xl text-slate-300 focus:outline-none scrollbar-thin select-all"
+              />
+            </div>
+
+            <div className="flex justify-end pt-2">
+              <button
+                onClick={() => {
+                  setExportModalOpen(false);
+                  setCopiedDataSuccess(false);
+                }}
+                className="px-4 py-2 bg-slate-800 hover:bg-slate-700 hover:text-white rounded-xl text-xs font-semibold text-slate-300 cursor-pointer transition-colors"
+              >
+                Fechar
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* PASSWORD PROTECTION MODAL */}
+      {passwordModalOpen && (
+        <div className="fixed inset-0 bg-slate-950/85 backdrop-blur-xs flex items-center justify-center p-4 z-50 no-print animate-fadeIn">
+          <div className="bg-slate-900 border border-slate-800 rounded-3xl max-w-sm w-full p-6 space-y-4 shadow-2xl relative animate-scaleUp">
+            <button
+              onClick={() => {
+                setPasswordModalOpen(false);
+                setPasswordInput("");
+                setPasswordError(null);
+              }}
+              className="absolute top-4 right-4 p-1.5 hover:bg-slate-800 rounded-xl text-slate-400 hover:text-white transition-colors cursor-pointer"
+            >
+              <X className="h-5 w-5" />
+            </button>
+
+            <div className="flex flex-col items-center text-center space-y-2">
+              <div className="p-3 bg-blue-500/10 rounded-full border border-blue-500/20 text-blue-400">
+                <Lock className="h-6 w-6" />
+              </div>
+              <h3 className="font-display font-medium text-white text-base">
+                Área Administrativa
+              </h3>
+              <p className="text-xs text-slate-400 leading-normal px-2">
+                Para acessar as ferramentas de edição e personalização, por favor insira a senha de acesso.
+              </p>
+            </div>
+
+            <form onSubmit={handleVerifyPassword} className="space-y-3.5">
+              <div className="space-y-1.5">
+                <label className="text-[10px] font-bold uppercase tracking-wider text-slate-400">
+                  Senha de Acesso
+                </label>
+                <input
+                  type="password"
+                  value={passwordInput}
+                  onChange={(e) => {
+                    setPasswordInput(e.target.value);
+                    if (passwordError) setPasswordError(null);
+                  }}
+                  placeholder="••••••••"
+                  autoFocus
+                  className="w-full text-center tracking-widest text-sm px-4 py-3 bg-slate-950 border border-slate-850 rounded-xl text-white placeholder-slate-700 focus:outline-none focus:border-blue-500 font-mono transition-colors"
+                />
+                {passwordError && (
+                  <p className="text-[11px] text-rose-400 text-center font-medium animate-pulse">
+                    {passwordError}
+                  </p>
+                )}
+              </div>
+
+              <div className="grid grid-cols-2 gap-2.5 pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setPasswordModalOpen(false);
+                    setPasswordInput("");
+                    setPasswordError(null);
+                  }}
+                  className="py-2.5 bg-slate-800 hover:bg-slate-700 text-slate-300 font-semibold rounded-xl text-xs cursor-pointer transition-colors"
+                >
+                  Cancelar
+                </button>
+                <button
+                  type="submit"
+                  className="py-2.5 bg-blue-600 hover:bg-blue-500 active:bg-blue-700 text-white font-semibold rounded-xl text-xs cursor-pointer transition-all shadow-md shadow-blue-950/20"
+                >
+                  Confirmar
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
