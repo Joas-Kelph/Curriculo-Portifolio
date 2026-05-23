@@ -1,0 +1,6 @@
+{
+  "name": "Portfólio de Currículos - Joás Kelph",
+  "description": "Portfólio interativo de currículos especializados em Gestão, Confeitaria, Atendimento e Padaria, com edição dinâmica, geração de PDF e aprimoramento via IA.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
