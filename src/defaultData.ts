@@ -1,7 +1,7 @@
 import { CurriculoMultidisciplinar } from "./types";
 
 export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
-  "activeArea": "Confeitaria",
+  "activeArea": "Tecnologia da Informação",
   "areas": {
     "Gestão": {
       "nome": "Joás Kelph",
@@ -30,6 +30,13 @@ export const DEFAULT_CURRICULOS: CurriculoMultidisciplinar = {
           "cargo": "Experiência e Competidor Técnica",
           "periodo": "Grand Prix SENAI (2 edições)",
           "descricao": "Resolução de problemas reais: Desenvolvimento de soluções estratégicas para desafios reais de empresas em maratonas de 72 horas. Foco em Resultados: Diagnóstico ágil de gargalos operacionais e proposição de melhorias com foco em eficiência e redução de custos. Soft Skills: Demonstração de alta capacidade de trabalho sob pressão, liderança colaborativa e gestão de tempo crítica."
+        },
+        {
+          "id": "exp_1779903885268",
+          "empresa": "L’Occitane au Brésil",
+          "cargo": "Supervisor de Loja",
+          "periodo": "Janeiro - Março 2025",
+          "descricao": "Supervisão e apoio à equipe de vendas, orientando no atendimento ao cliente e cumprimento de metas. Orientação, treinamento e apoio aos colaboradores nas rotinas diárias da loja. Organização das escalas de trabalho e distribuição de tarefas da equipe. Acompanhamento dos indicadores de vendas e apoio em ações para melhoria de resultados. Controle e acompanhamento do estoque, inventários e reposição de mercadorias. Conferência de recebimento de produtos e apoio aos processos logísticos. Suporte à abertura e fechamento da loja, assegurando o cumprimento dos procedimentos internos."
         }
       ],
       "educacoes": [
